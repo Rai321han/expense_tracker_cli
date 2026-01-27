@@ -40,9 +40,15 @@ def main():
 
     args = parser.parse_args()
 
-    if args.command == "add":
-        print("Adding expense:")
-        print("Date:", args.date)
-        print("Category:", args.category)
-        print("Amount:", args.amount)
-        print("Note:", args.note)
+    if args.command == 'add':
+        from .service import ExpenseService
+        result = ExpenseService.add_expense(
+            date=args.date.isoformat() if args.date else datetime.now().date().isoformat(),
+            category=args.category,
+            amount=args.amount,
+            note=args.note
+        )
+        if result:
+            print("Expense added successfully.")
+        else:
+            print("Failed to add expense.")
