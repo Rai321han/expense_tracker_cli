@@ -18,6 +18,7 @@ class ExpenseService:
             amount=amount,
             note=note
         )
+
         savedExpense = save(expense.to_dict())
         return f"Added: {savedExpense['id']} | {savedExpense['date']} | {savedExpense['category']} | {savedExpense['amount']} {savedExpense['currency']} | {savedExpense['note']}"
 
@@ -36,7 +37,7 @@ class ExpenseService:
         min_amount = filters["min"] or None
         max_amount = filters["max"] or None
         limit = filters["limit"] or None
-        sort_direction = 1  # ascending
+        sort_direction = -1  # ascending
 
         if from_date and not validateDate(from_date):
             raise ValueError("Invalid 'from' date format. Please use YYYY-MM-DD.")
@@ -78,6 +79,3 @@ class ExpenseService:
         if limit:
             filtered_expenses = filtered_expenses[:limit]
         return filtered_expenses
-    
-    # def retrieve_last_expense_id():
-    #     pass

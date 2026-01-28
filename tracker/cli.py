@@ -23,6 +23,7 @@ def main():
     parser_list.add_argument('--sort', type=str, help="one of: date, amount, category (default: date)")
     parser_list.add_argument('--limit', type=int, help="integer limit")
     parser_list.add_argument('--format', type=str, help="view in table or csv format")
+    parser_list.add_argument('--desc', type=bool, help="view in descending order; default is ascending")
 
     #summary subcommand
     parser_summary = subparsers.add_parser('summary', help="show summary with filters")
@@ -35,6 +36,7 @@ def main():
     parser_summary.add_argument('--sort', type=str, help="one of: date, amount, category (default: date)")
     parser_summary.add_argument('--limit', type=int, help="integer limit")
     parser_summary.add_argument('--format', type=str, help="view in table or csv format")
+    parser_summary.add_argument('--desc', type=bool, help="view in descending order; default is ascending")
 
 
     args = parser.parse_args()
