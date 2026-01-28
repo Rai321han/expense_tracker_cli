@@ -5,7 +5,6 @@ def generateExpenseId(dateStr, no):
     date = datetime.datetime.fromisoformat(dateStr)
     return f"EXP-{date.year}{date.month:02d}{date.day:02d}-{no}"
 
-# only valid date format from cli is YYYY-MM-DD
 def validateDate(dateStr):
     try:
         datetime.datetime.strptime(dateStr, '%Y-%m-%d')
@@ -20,13 +19,10 @@ def validateMonth(dateStr):
     except ValueError:
         return False
 
-
-
 def format_table(expenses):
     lines = []
     header = f"{'ID':<15} {'Date':<12} {'Category':<15} {'Amount':>10}  {'Note'}"
     lines.append(header)
-
 
     for exp in expenses:
         lines.append(
@@ -36,12 +32,12 @@ def format_table(expenses):
             f"{exp['amount']:>10.2f}  "
             f"{exp['note']}"
         )
-
     return lines
 
 def format_csv(expenses):
     lines = []
     header = "ID,Date,Category,Amount,Note"
+    lines.append(header)
 
     for exp in expenses:
         lines.append(
