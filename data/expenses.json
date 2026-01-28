@@ -2,7 +2,7 @@
     "version": "1.0",
     "expenses": [
         {
-            "id": "EXP-20260127-1",
+            "id": "EXP-20260128-1",
             "date": "2026-01-27",
             "category": "electronics",
             "amount": 1500.0,
