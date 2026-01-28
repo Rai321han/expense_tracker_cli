@@ -1,18 +1,39 @@
 import os
 import json
 
+DATA_FILE = "./data/expenses.json"
+
 def save(expense_dict):
-    # check if expenses.json exists
-    if not os.path.exists('./data/expenses.json'):
-        with open('./data/expenses.json', 'a') as f:
-            # add {
-            # 'version': '1.0',
-            # 'expenses': []
-            # }
-            f.write('{"version": "1.0", "expenses": []}')
-    with open('./data/expenses.json', 'r') as f:
-        data = json.load(f)
-    data['expenses'].append(expense_dict)
-    with open('./data/expenses.json', 'w') as f:
+    os.makedirs("./data", exist_ok=True)
+
+    if not os.path.exists(DATA_FILE):
+        with open(DATA_FILE, "w") as f:
+            json.dump({"version": "1.0", "expenses": []}, f, indent=4)
+
+    with open(DATA_FILE, "r") as f:
+        try:
+            data = json.load(f)
+        except json.JSONDecodeError:
+            data = {"version": "1.0", "expenses": []}
+
+    data["expenses"].append(expense_dict)
+
+    with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=4)
-    return True
+
+    return expense_dict
+
+
+def load():
+    os.makedirs("./data", exist_ok=True)
+
+    if not os.path.exists(DATA_FILE):
+        raise FileExistsError("invalid storage")
+    
+    with open(DATA_FILE, "r") as f:
+        try:
+            data = json.load(f)
+        except json.JSONDecodeError as e:
+            raise e
+    return data
+        # end try
