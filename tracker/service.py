@@ -1,4 +1,6 @@
+import calendar
 from datetime import datetime
+import json
 from tracker.models import Expense
 from tracker.storage import save, load
 from tracker.utils import generateExpenseId, validateDate, validateMonth
@@ -11,8 +13,22 @@ class ExpenseService:
         if amount < 0:
             raise ValueError("Amount cannot be negative.")
 
+        # get last expense number from storage to generate next id no
+
+        data = load()
+        expenses = data["expenses"]
+        last_no = 0
+
+        # take the last expense and extract the number
+        if len(expenses) > 0:
+            last_expense = expenses[-1]
+            last_id = last_expense["id"]
+            last_no = int(last_id.split("-")[-1])
+
+        next_no = last_no + 1
+
         expense = Expense(
-            id=generateExpenseId(date, 1),
+            id=generateExpenseId(date, next_no),
             date=date,
             category=category,
             amount=amount,
@@ -20,7 +36,45 @@ class ExpenseService:
         )
 
         savedExpense = save(expense.to_dict())
-        return f"Added: {savedExpense['id']} | {savedExpense['date']} | {savedExpense['category']} | {savedExpense['amount']} {savedExpense['currency']} | {savedExpense['note']}"
+        return savedExpense
+
+    def edit_expense(id, date: str, category, amount, note) -> Expense:
+        if date and not validateDate(date):
+            raise ValueError("Invalid date format. Please use YYYY-MM-DD.")
+
+        if amount and amount < 0:
+            raise ValueError("Amount cannot be negative.")
+        
+        data = load()
+   
+        expenses = data["expenses"]
+        print(expenses)
+        for idx, exp in enumerate(expenses):
+            if exp["id"] == id:
+                expenses[idx]["date"] = date or expenses[idx]["date"]
+                expenses[idx]["category"] = category or expenses[idx]["category"]
+                expenses[idx]["amount"] = amount or expenses[idx]["amount"]
+                expenses[idx]["note"] = note or expenses[idx]["note"]
+                # save back
+                with open('./data/expenses.json', 'w') as f:
+                    json.dump(data, f, indent=4)
+                return expenses[idx] 
+        raise ValueError(f"Expense with ID {id} not found.")
+
+
+    def delete_expense(id) -> Expense:
+        data = load()
+   
+        expenses = data["expenses"]
+        for idx, exp in enumerate(expenses):
+            if exp["id"] == id:
+                deleted_expense = expenses.pop(idx)
+                # save back
+                with open('./data/expenses.json', 'w') as f:
+                    json.dump(data, f, indent=4)
+                return deleted_expense
+        raise ValueError(f"Expense with ID {id} not found.")
+
 
 
     def list_expenses(filters):
@@ -37,8 +91,7 @@ class ExpenseService:
         min_amount = filters["min"] or None
         max_amount = filters["max"] or None
         limit = filters["limit"] or None
-        sort_direction = -1  # ascending
-
+        sort_direction = filters["desc"] and -1 or 1
         if from_date and not validateDate(from_date):
             raise ValueError("Invalid 'from' date format. Please use YYYY-MM-DD.")
         if to_date and not validateDate(to_date):
@@ -57,6 +110,9 @@ class ExpenseService:
         data = load()
         expenses = data["expenses"]
         # Apply filters
+        if len(expenses) == 0:
+            return []
+        
         filtered_expenses = []
         for exp in expenses:
             if month and not exp["date"].startswith(month):
@@ -79,3 +135,41 @@ class ExpenseService:
         if limit:
             filtered_expenses = filtered_expenses[:limit]
         return filtered_expenses
+    
+    def summarize_expenses(filters):
+        expenses = ExpenseService.list_expenses(filters)
+        if len(expenses) == 0:
+            return {"grand_total": 0, "total_expenses": 0}
+        total_amount = sum(exp["amount"] for exp in expenses)
+        count = len(expenses)
+
+        category_totals = {}
+        for exp in expenses:
+            cat = exp["category"]
+            category_totals[cat] = category_totals.get(cat, 0) + exp["amount"]
+        
+        #highest expense
+        highest_expense = max(expenses, key=lambda x: x["amount"])
+
+        #average per day
+        month = filters["month"] or datetime.today().date().isoformat()[:7]
+        year, month = map(int, month.split("-"))
+        days_in_month = calendar.monthrange(year, month)[1]
+        average_per_day = total_amount / days_in_month if days_in_month > 0 else 0
+
+        # catergory wise percentage
+        category_percentages = {}
+        for cat, total in category_totals.items():
+            category_percentages[cat] = (total / total_amount) * 100 if total_amount > 0 else 0
+
+        summary = {
+            "month": filters["month"] or datetime.today().date().isoformat()[:7],
+            "grand_total": total_amount,
+            "total_expenses": count,
+            "category_totals": category_totals,
+            "average_per_day": average_per_day,
+            "category_percentages": category_percentages,
+            "highest_expense": highest_expense,
+            "currency": expenses[0]["currency"]
+        }
+        return summary
