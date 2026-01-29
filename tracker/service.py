@@ -118,6 +118,7 @@ class ExpenseService:
         Returns:
             list[Expense]: List of filtered and sorted expense objects
         """
+
         validated = validateFilters(filters)
 
         month = validated.month
@@ -172,8 +173,10 @@ class ExpenseService:
             ExpenseSummary: Dict containing grand_total, category totals, averages, percentages, and highest expense
         """
         expenses = ExpenseService.list_expenses(filters)
+
         if len(expenses) == 0:
-            return {"grand_total": 0, "total_expenses": 0}
+            return []
+
         total_amount = sum(exp["amount"] for exp in expenses)
         count = len(expenses)
 
@@ -185,8 +188,14 @@ class ExpenseService:
         # highest expense
         highest_expense = max(expenses, key=lambda x: x["amount"])
 
+        summary_title = ""
+        if filters.get("from") and filters.get("to"):
+            summary_title = f"Summary ({filters.get("from")} to {filters.get("to")})"
+        else:
+            summary_title = f"Summary ({filters.get("month") or datetime.today().date().isoformat()[:7]})"
+
         # average per day
-        month = filters["month"] or datetime.today().date().isoformat()[:7]
+        month = filters.get("month") or datetime.today().date().isoformat()[:7]
         year, month = map(int, month.split("-"))
         days_in_month = calendar.monthrange(year, month)[1]
         average_per_day = total_amount / days_in_month if days_in_month > 0 else 0
@@ -199,7 +208,7 @@ class ExpenseService:
             )
 
         summary = {
-            "month": filters["month"] or datetime.today().date().isoformat()[:7],
+            "title": summary_title,
             "grand_total": total_amount,
             "total_expenses": count,
             "category_totals": category_totals,
@@ -208,4 +217,5 @@ class ExpenseService:
             "highest_expense": highest_expense,
             "currency": expenses[0]["currency"],
         }
+
         return summary

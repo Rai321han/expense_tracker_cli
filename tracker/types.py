@@ -2,7 +2,7 @@ from typing import TypedDict, Literal, Optional
 from dataclasses import dataclass
 
 
-class ExpenseFilters(TypedDict):
+class ExpenseFilters(TypedDict, total=False):
     month: str | None
     sort: Literal["date", "amount", "category"] | None
     desc: bool | None
@@ -16,7 +16,7 @@ class ExpenseFilters(TypedDict):
 
 
 class ExpenseSummary(TypedDict):
-    month: str
+    title: str
     grand_total: float
     total_expenses: float
     category_totals: dict
@@ -24,6 +24,7 @@ class ExpenseSummary(TypedDict):
     category_percentages: float
     highest_expense: dict
     currency: str
+    summary_type: Literal["range", "monthly"]
 
 
 @dataclass(frozen=True)

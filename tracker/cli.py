@@ -87,19 +87,8 @@ def main():
         "--to", type=str, help="to the day of the month - format: YYYY-MM-DD"
     )
     parser_summary.add_argument("--category", type=str, help="filter by category name")
-    parser_summary.add_argument("--min", type=float, help="filter by min amount")
-    parser_summary.add_argument("--max", type=float, help="filter by max amount")
-    parser_summary.add_argument(
-        "--sort", type=str, help="one of: date, amount, category (default: date)"
-    )
-    parser_summary.add_argument("--limit", type=int, help="integer limit")
     parser_summary.add_argument(
         "--format", type=str, help="view in table or csv format"
-    )
-    parser_summary.add_argument(
-        "--desc",
-        action="store_true",
-        help="view in descending order; default is ascending",
     )
 
     args = parser.parse_args()
@@ -184,18 +173,14 @@ def list_parser(args):
         print("No expenses found.")
         return
 
+    lines = []
     if args.format and args.format.lower() == "csv":
         lines = format_list_csv(expenses)
-        # save to a file
-        csv_file = f"expenses_list.csv"
-        with open(csv_file, "w", newline="") as f:
-            f.write("\n".join(lines))
-        print(f"Expenses list exported to {csv_file}")
     else:
         # default: terminal table
         lines = format_table(expenses)
-        for line in lines:
-            print(line)
+    for line in lines:
+        print(line)
 
 
 @log_command("summary")
@@ -216,12 +201,7 @@ def summary_parser(args):
         "from": args.__dict__.get("from"),
         "to": args.to,
         "category": args.category,
-        "min": args.min,
-        "max": args.max,
-        "sort": args.sort or "date",
-        "limit": args.limit,
         "format": args.format or "table",
-        "desc": args.desc,
     }
     summary = ExpenseService.summarize_expenses(filters)
     if len(summary) == 0:
@@ -229,18 +209,14 @@ def summary_parser(args):
         return
 
     # Decide output format
+    lines = []
     if args.format and args.format.lower() == "csv":
         lines = format_summary_csv(summary)
-        # save to a file
-        csv_file = f"summary_{summary['month']}.csv"
-        with open(csv_file, "w", newline="") as f:
-            f.write("\n".join(lines))
-        print(f"Summary exported to {csv_file}")
     else:
         # default: terminal table
         lines = print_summary(summary)
-        for line in lines:
-            print(line)
+    for line in lines:
+        print(line)
 
 
 @log_command("edit")

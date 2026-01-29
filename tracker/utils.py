@@ -114,8 +114,7 @@ def print_summary(summary: ExpenseSummary) -> list[str]:
         list[str]: Formatted summary lines for display
     """
     lines = []
-    title = f"Summary ({summary['month']})"
-    lines.append(title)
+    lines.append(f"{summary["title"]}")
     lines.append(f"Total Expenses: {summary["total_expenses"]}")
     lines.append(f"Grand Amount: {summary['grand_total']:.2f} {summary['currency']}")
     lines.append("")
@@ -145,7 +144,7 @@ def format_summary_csv(summary: ExpenseSummary) -> list[str]:
     lines = []
 
     # Header info
-    lines.append(f"Summary for {summary['month']}")
+    lines.append(f"{summary["title"]}")
     lines.append(f"Total Expenses,{summary['total_expenses']}")
     lines.append(f"Grand Total,{summary['grand_total']:.2f} {summary['currency']}")
     lines.append("")
@@ -185,20 +184,33 @@ def validateFilters(filters: ExpenseFilters):
     Returns:
         ValidatedFilters: Normalized filter object with validated values
     """
-    month = filters["month"] or datetime.today().date().isoformat()[:7]
+
+    from_date = filters.get("from") or None
+    to_date = filters.get("to") or None
+
+    if filters.get("month") and (from_date or to_date):
+        raise ValueError(
+            "'--from' and '--to' cannot work with '--month'. Either use '--from' and '--to' or '--month' only."
+        )
+
+    if (from_date and not to_date) or (to_date and not from_date):
+        raise ValueError("'--from' and '--to' should be used together")
+
+    month = filters.get("month") or datetime.today().date().isoformat()[:7]
     if month and not validateMonth(month):
         raise ValueError("Invalid month format. Please use YYYY-MM.")
 
-    sort = filters["sort"] or "date"
+    sort = filters.get("sort") or "date"
+
+    category = filters.get("category")
+    category = category.lower() if category else None
+    min_amount = filters.get("min") or None
+    max_amount = filters.get("max") or None
+    limit = filters.get("limit") or None
+    sort_direction = filters.get("desc") and -1 or 1
+
     if sort and sort not in ["date", "amount", "category"]:
         raise ValueError("Invalid sort key. Must be one of: date, amount, category.")
-    from_date = filters["from"] or None
-    to_date = filters["to"] or None
-    category = filters["category"] != None and filters["category"].lower() or None
-    min_amount = filters["min"] or None
-    max_amount = filters["max"] or None
-    limit = filters["limit"] or None
-    sort_direction = filters["desc"] and -1 or 1
 
     if from_date and not validateDate(from_date):
         raise ValueError("Invalid 'from' date format. Please use YYYY-MM-DD.")
