@@ -64,15 +64,19 @@ def format_table(expenses: list[Expense]) -> list[str]:
         list[str]: Formatted table lines with header and expense rows
     """
     lines = []
-    header = f"{'ID':<17} {'Date':<12} {'Category':<15} {'Amount':>10}  {'Note'}"
+    header = (
+        f"{'ID':<17} | {'Date':<12} | {'Category':<15} | {'Amount':>15} |  {'Note'}"
+    )
+    lines.append("-" * len(header))
     lines.append(header)
+    lines.append("-" * len(header))
 
     for exp in expenses:
         lines.append(
-            f"{exp['id']:<17} "
-            f"{exp['date']:<12} "
-            f"{exp['category']:<15} "
-            f"{exp['amount']:>10.2f}  "
+            f"{exp['id']:<17} | "
+            f"{exp['date']:<12} | "
+            f"{exp['category']:<15} | "
+            f"{exp['amount']:>10.2f} {exp["currency"]}  | "
             f"{exp['note']}"
         )
     return lines
@@ -123,7 +127,7 @@ def print_summary(summary: ExpenseSummary) -> list[str]:
         lines.append(f"{category:<15} " f"{total:>15.2f} {summary['currency']}")
     lines.append("")
     lines.append(
-        f"Average per day in a month: {summary['average_per_day']:.2f} {summary['currency']}"
+        f"Average per day: {summary['average_per_day']:.2f} {summary['currency']}"
     )
     lines.append("")
     lines.append("Highest Expense:")
@@ -156,7 +160,7 @@ def format_summary_csv(summary: ExpenseSummary) -> list[str]:
 
     lines.append("")
     lines.append(
-        f"Average per day in month,{summary['average_per_day']:.2f} {summary['currency']}"
+        f"Average per day,{summary['average_per_day']:.2f} {summary['currency']}"
     )
     lines.append("")
 
