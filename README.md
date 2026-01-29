@@ -127,11 +127,11 @@ python -m tracker delete --id "EXP-20260129-0001"
 #### 5. Generate Summary
 
 ```bash
-python -m tracker summary [--month "2026-01"] [--from "2026-01-01"] [--to "2026-01-31"] [--category "Food"] [--min 10] [--max 100] [--sort "date"] [--limit 10] [--format "table"] [--desc]
+python -m tracker summary [--from "2026-01-01"] [--to "2026-01-31"] [--category "Food"]
 ```
 
 **Options:**
-- Same filtering options as `list` command
+- Same filtering options (`--from`, `--to`, `--month`, `--category`) as `list` command
 - Displays aggregated data including totals, averages, and category breakdowns
 
 ## Examples
