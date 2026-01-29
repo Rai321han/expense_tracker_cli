@@ -5,11 +5,30 @@ from tracker.logger import logger
 
 
 def generateExpenseId(dateStr: str, no: int) -> str:
+    """
+    Generate a unique expense ID from date and sequence number.
+
+    Args:
+        dateStr: Date string in YYYY-MM-DD format
+        no: Sequential number for the expense
+
+    Returns:
+        str: Formatted expense ID (e.g., EXP-20260129-0001)
+    """
     date = datetime.fromisoformat(dateStr)
     return f"EXP-{date.year}{date.month:02d}{date.day:02d}-{no:04d}"
 
 
 def validateDate(dateStr: str) -> bool:
+    """
+    Validate if a date string is in YYYY-MM-DD format.
+
+    Args:
+        dateStr: Date string to validate
+
+    Returns:
+        bool: True if valid date format, False otherwise
+    """
     try:
         datetime.strptime(dateStr, "%Y-%m-%d")
         return True
@@ -18,6 +37,15 @@ def validateDate(dateStr: str) -> bool:
 
 
 def validateMonth(dateStr: str) -> bool:
+    """
+    Validate if a date string is in YYYY-MM format.
+
+    Args:
+        dateStr: Date string to validate
+
+    Returns:
+        bool: True if valid month format, False otherwise
+    """
     try:
         datetime.strptime(dateStr, "%Y-%m")
         return True
@@ -26,6 +54,15 @@ def validateMonth(dateStr: str) -> bool:
 
 
 def format_table(expenses: list[Expense]) -> list[str]:
+    """
+    Format expenses as a table string for display.
+
+    Args:
+        expenses: List of expense dictionaries to format
+
+    Returns:
+        list[str]: Formatted table lines with header and expense rows
+    """
     lines = []
     header = f"{'ID':<17} {'Date':<12} {'Category':<15} {'Amount':>10}  {'Note'}"
     lines.append(header)
@@ -42,6 +79,15 @@ def format_table(expenses: list[Expense]) -> list[str]:
 
 
 def format_csv(expenses: list[Expense]) -> list[str]:
+    """
+    Format expenses as CSV lines for export.
+
+    Args:
+        expenses: List of expense dictionaries to format
+
+    Returns:
+        list[str]: Formatted CSV lines with header and expense rows
+    """
     lines = []
     header = "ID,Date,Category,Amount,Note"
     lines.append(header)
@@ -58,6 +104,15 @@ def format_csv(expenses: list[Expense]) -> list[str]:
 
 
 def print_summary(summary: ExpenseSummary) -> list[str]:
+    """
+    Format expense summary data for display.
+
+    Args:
+        summary: Dictionary containing expense summary with totals, categories, and analytics
+
+    Returns:
+        list[str]: Formatted summary lines for display
+    """
     lines = []
     title = f"Summary ({summary['month']})"
     lines.append(title)
@@ -84,6 +139,15 @@ def print_summary(summary: ExpenseSummary) -> list[str]:
 
 
 def validateFilters(filters: ExpenseFilters):
+    """
+    Validate and normalize expense filter parameters.
+
+    Args:
+        filters: Dictionary of filter parameters (month, sort, date range, category, amount range, limit, desc)
+
+    Returns:
+        ValidatedFilters: Normalized filter object with validated values
+    """
     month = filters["month"] or datetime.today().date().isoformat()[:7]
     if month and not validateMonth(month):
         raise ValueError("Invalid month format. Please use YYYY-MM.")
@@ -128,6 +192,15 @@ def validateFilters(filters: ExpenseFilters):
 
 
 def log_command(command_name):
+    """
+    Decorator to log command execution with arguments and results.
+
+    Args:
+        command_name: Name of the command being logged
+
+    Returns:
+        function: Decorator function that wraps the command
+    """
     def decorator(func):
         def wrapper(*args, **kwargs):
             from tracker.logger import logger

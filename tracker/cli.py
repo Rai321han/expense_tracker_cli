@@ -5,6 +5,15 @@ from tracker.logger import logger
 
 
 def main():
+    """
+    Parse command line arguments and route to appropriate command handler.
+
+    Args:
+        None (uses sys.argv from command line)
+
+    Returns:
+        None
+    """
     parser = argparse.ArgumentParser(prog="tracker")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -111,6 +120,15 @@ def main():
 
 @log_command("add")
 def add_parser(args):
+    """
+    Add a new expense to the tracker.
+
+    Args:
+        args: Parsed command line arguments containing date, category, amount, and note
+
+    Returns:
+        None
+    """
     from .service import ExpenseService
 
     try:
@@ -132,6 +150,15 @@ def add_parser(args):
 
 @log_command("list")
 def list_parser(args):
+    """
+    List expenses with optional filters and formatting.
+
+    Args:
+        args: Parsed command line arguments with filter options (month, from, to, category, min, max, sort, limit, format, desc)
+
+    Returns:
+        None (prints results to stdout)
+    """
     from .service import ExpenseService
 
     filters = {
@@ -165,6 +192,15 @@ def list_parser(args):
 
 @log_command("summary")
 def summary_parser(args):
+    """
+    Display a summary of expenses with optional filters.
+
+    Args:
+        args: Parsed command line arguments with filter options (month, from, to, category, min, max, sort, limit, format, desc)
+
+    Returns:
+        None (prints summary to stdout)
+    """
     from .service import ExpenseService
 
     filters = {
@@ -191,6 +227,15 @@ def summary_parser(args):
 
 @log_command("edit")
 def edit_parser(args):
+    """
+    Edit an existing expense by ID.
+
+    Args:
+        args: Parsed command line arguments containing expense id and optional fields to update (date, category, amount, note)
+
+    Returns:
+        None
+    """
     from .service import ExpenseService
 
     result = ExpenseService.edit_expense(
@@ -210,6 +255,15 @@ def edit_parser(args):
 
 @log_command("delete")
 def delete_parser(args):
+    """
+    Delete an expense by ID.
+
+    Args:
+        args: Parsed command line arguments containing expense id to delete
+
+    Returns:
+        None
+    """
     from .service import ExpenseService
 
     result = ExpenseService.delete_expense(id=args.id)

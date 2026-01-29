@@ -5,6 +5,15 @@ DATA_FILE = "./data/expenses.json"
 
 
 def save(expense_dict):
+    """
+    Save an expense to the JSON storage file.
+
+    Args:
+        expense_dict: Dictionary containing expense data to save
+
+    Returns:
+        dict: The saved expense dictionary
+    """
     os.makedirs("./data", exist_ok=True)
 
     if not os.path.exists(DATA_FILE):
@@ -26,6 +35,15 @@ def save(expense_dict):
 
 
 def load():
+    """
+    Load all expenses from the JSON storage file.
+
+    Args:
+        None
+
+    Returns:
+        dict: The full data structure containing expenses and metadata
+    """
     os.makedirs("./data", exist_ok=True)
 
     if not os.path.exists(DATA_FILE):

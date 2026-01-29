@@ -9,6 +9,18 @@ from tracker.types import ExpenseFilters, ExpenseSummary
 
 class ExpenseService:
     def add_expense(date: str, category: str, amount: float, note: str) -> Expense:
+        """
+        Add a new expense to the storage.
+
+        Args:
+            date: Expense date in YYYY-MM-DD format
+            category: Expense category name
+            amount: Expense amount (must be non-negative)
+            note: Additional note for the expense
+
+        Returns:
+            Expense: The saved expense object
+        """
         if not validateDate(date):
             raise ValueError("Invalid date format. Please use YYYY-MM-DD.")
 
@@ -42,6 +54,19 @@ class ExpenseService:
     def edit_expense(
         id: str, date: str, category: str, amount: float, note: str
     ) -> Expense:
+        """
+        Edit an existing expense by ID.
+
+        Args:
+            id: Expense ID to update
+            date: New date in YYYY-MM-DD format (optional)
+            category: New category name (optional)
+            amount: New amount (optional)
+            note: New note (optional)
+
+        Returns:
+            Expense: The updated expense object
+        """
         if date and not validateDate(date):
             raise ValueError("Invalid date format. Please use YYYY-MM-DD.")
 
@@ -51,7 +76,6 @@ class ExpenseService:
         data = load()
 
         expenses = data["expenses"]
-        print(expenses)
         for idx, exp in enumerate(expenses):
             if exp["id"] == id:
                 expenses[idx]["date"] = date or expenses[idx]["date"]
@@ -65,6 +89,15 @@ class ExpenseService:
         raise ValueError(f"Expense with ID {id} not found.")
 
     def delete_expense(id: str) -> Expense:
+        """
+        Delete an expense by ID.
+
+        Args:
+            id: Expense ID to delete
+
+        Returns:
+            Expense: The deleted expense object
+        """
         data = load()
         expenses = data["expenses"]
         for idx, exp in enumerate(expenses):
@@ -76,6 +109,15 @@ class ExpenseService:
         raise ValueError(f"Expense with ID {id} not found.")
 
     def list_expenses(filters: ExpenseFilters) -> list[Expense]:
+        """
+        List expenses with optional filters and sorting.
+
+        Args:
+            filters: ExpenseFilters dict containing month, date range, category, amount range, sorting, and limit
+
+        Returns:
+            list[Expense]: List of filtered and sorted expense objects
+        """
         validated = validateFilters(filters)
 
         month = validated.month
@@ -120,6 +162,15 @@ class ExpenseService:
         return filtered_expenses
 
     def summarize_expenses(filters: ExpenseFilters) -> ExpenseSummary:
+        """
+        Generate a summary of expenses with analytics.
+
+        Args:
+            filters: ExpenseFilters dict to filter expenses before summarizing
+
+        Returns:
+            ExpenseSummary: Dict containing grand_total, category totals, averages, percentages, and highest expense
+        """
         expenses = ExpenseService.list_expenses(filters)
         if len(expenses) == 0:
             return {"grand_total": 0, "total_expenses": 0}
