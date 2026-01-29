@@ -60,10 +60,12 @@ python -m tracker add --category "Food" --amount 50.00 [--date "2026-01-29"] [--
 ```
 
 **Options:**
-- `--category` (required): Expense category name
-- `--amount` (required): Expense amount
-- `--date` (optional): Date in YYYY-MM-DD format (defaults to today)
-- `--note` (optional): Additional note for the expense
+| Arguments | Description|
+| - | - |
+| `--category` | (required): Expense category name |
+| `--amount` | (required): Expense amount |
+| `--date` | (optional): Date in YYYY-MM-DD format (defaults to today) |
+| `--note` | (optional): Additional note for the expense |
 
 #### 2. List Expenses
 
@@ -72,16 +74,18 @@ python -m tracker list [--month "2026-01"] [--from "2026-01-01"] [--to "2026-01-
 ```
 
 **Options:**
-- `--month`: Filter by month in YYYY-MM format
-- `--from`: Start date in YYYY-MM-DD format
-- `--to`: End date in YYYY-MM-DD format
-- `--category`: Filter by category name
-- `--min`: Filter by minimum amount
-- `--max`: Filter by maximum amount
-- `--sort`: Sort key: `date`, `amount`, or `category` (default: `date`)
-- `--limit`: Maximum number of expenses to display
-- `--format`: Output format: `table` or `csv` (default: `table`)
-- `--desc`: Display in descending order (default: ascending)
+| options | description|
+| - | - |
+| `--month`| Filter by month in YYYY-MM format |
+| `--from`| Start date in YYYY-MM-DD format |
+| `--to`| End date in YYYY-MM-DD format |
+| `--category`| Filter by category name |
+| `--min`| Filter by minimum amount |
+| `--max`| Filter by maximum amount |
+| `--sort`| Sort key: `date`, `amount`, or `category` (default: `date`) |
+| `--limit`| Maximum number of expenses to display |
+| `--format`| Output format: `table` or `csv` (default: `table`) |
+| `--desc`| Display in descending order (default: ascending) |
 
 #### 3. Edit an Expense
 
@@ -90,11 +94,13 @@ python -m tracker edit --id "EXP-20260129-0001" [--date "2026-01-29"] [--categor
 ```
 
 **Options:**
-- `--id` (required): Expense ID to update
-- `--date` (optional): New date
-- `--category` (optional): New category
-- `--amount` (optional): New amount
-- `--note` (optional): New note
+| options | description|
+| - | - |
+| `--id`| (required): Expense ID to update|
+| `--date`| (optional): New date|
+| `--category`| (optional): New category|
+| `--amount`| (optional): New amount|
+| `--note`| (optional): New note|
 
 #### 4. Delete an Expense
 
@@ -103,7 +109,9 @@ python -m tracker delete --id "EXP-20260129-0001"
 ```
 
 **Options:**
-- `--id` (required): Expense ID to delete
+| options | description|
+| - | - |
+| `--id` | (required): Expense ID to delete |
 
 #### 5. Generate Summary
 
@@ -170,8 +178,7 @@ expense_tracker_cli/
     ├── storage.py         # File I/O operations for JSON storage
     ├── logger.py          # Logging configuration
     ├── types.py           # Type definitions and interfaces
-    ├── utils.py           # Utility functions (validation, formatting)
-    └── __pycache__/       # Python bytecode cache
+    └── utils.py           # Utility functions (validation, formatting)
 ```
 
 ## Data Storage
@@ -235,15 +242,5 @@ To add new features:
 ## Currency
 
 The application defaults to BDT (Bangladeshi Taka) but can be customized by modifying the `currency` parameter in the `Expense` model.
-
-## License
-
-This project is part of the W3 Internship program.
-
-## Support
-
-For issues or questions, please refer to the project documentation or check the logs for detailed error messages.
-
----
 
 **Last Updated**: January 29, 2026

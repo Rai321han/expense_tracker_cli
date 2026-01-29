@@ -41,3 +41,11 @@
 2026-01-29 13:07:26 | ERROR | Error in command 'delete' | Args: {'command': 'delete', 'id': 'EXP-20260125-3'} | Error: Expense with ID EXP-20260125-3 not found.
 2026-01-29 13:12:11 | INFO | Command: 'list' | Args: {'command': 'list', 'from': '2026-01', 'desc': False}
 2026-01-29 13:12:11 | ERROR | Error in command 'list' | Args: {'command': 'list', 'from': '2026-01', 'desc': False} | Error: Invalid 'from' date format. Please use YYYY-MM-DD.
+2026-01-29 13:22:03 | INFO | Command: 'list' | Args: {'command': 'list', 'desc': False}
+2026-01-29 13:22:03 | INFO | Command 'list' completed successfully
+2026-01-29 13:22:51 | INFO | Command: 'list' | Args: {'command': 'list', 'month': '2026-01', 'desc': False}
+2026-01-29 13:22:51 | INFO | Command 'list' completed successfully
+2026-01-29 13:23:11 | INFO | Command: 'list' | Args: {'command': 'list', 'category': 'Food', 'min': 20.0, 'max': 10000.0, 'desc': False}
+2026-01-29 13:23:11 | INFO | Command 'list' completed successfully
+2026-01-29 13:23:28 | INFO | Command: 'list' | Args: {'command': 'list', 'category': 'electronics', 'min': 1500.0, 'max': 10000.0, 'desc': False}
+2026-01-29 13:23:28 | INFO | Command 'list' completed successfully
