@@ -170,7 +170,7 @@ class ExpenseService:
             filters: ExpenseFilters dict to filter expenses before summarizing
 
         Returns:
-            ExpenseSummary: Dict containing grand_total, category totals, averages, percentages, and highest expense
+            ExpenseSummary: Dict containing title, grand_total, category totals, averages, percentages, and highest expense
         """
         expenses = ExpenseService.list_expenses(filters)
 
