@@ -27,17 +27,22 @@ A command-line application to manage and track your personal expenses efficientl
 
 ### Setup
 
-1. Clone or navigate to the project directory:
+1. Clone the project directory:
+```bash
+git clone https://github.com/Rai321han/expense_tracker_cli.git
+```
+
+2. Move to project directory
 ```bash
 cd expense_tracker_cli
 ```
 
-2. Create and activate a virtual environment:
+3. Create and activate a virtual environment:
 ```bash
 python -m venv .venv
 ```
 
-3. Activate virtual environment
+4. Activate virtual environment
 
 #### windows
 ```bash
