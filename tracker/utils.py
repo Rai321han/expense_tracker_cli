@@ -138,6 +138,43 @@ def print_summary(summary: ExpenseSummary) -> list[str]:
     return lines
 
 
+def format_summary_csv(summary: ExpenseSummary) -> list[str]:
+    """
+    Convert summary dict to CSV lines.
+    """
+    lines = []
+
+    # Header info
+    lines.append(f"Summary for {summary['month']}")
+    lines.append(f"Total Expenses,{summary['total_expenses']}")
+    lines.append(f"Grand Total,{summary['grand_total']:.2f} {summary['currency']}")
+    lines.append("")
+
+    # By category
+    lines.append("Category,Total Amount")
+    for category, total in summary["category_totals"].items():
+        lines.append(f"{category},{total:.2f} {summary["currency"]}")
+
+    lines.append("")
+    lines.append(
+        f"Average per day in month,{summary['average_per_day']:.2f} {summary['currency']}"
+    )
+    lines.append("")
+
+    # Highest expense
+    he = summary["highest_expense"]
+    lines.append("Highest Expense Date,Category,Amount")
+    lines.append(f"{he['date']},{he['category']},{he['amount']} {summary['currency']}")
+    lines.append("")
+
+    # Category percentages
+    lines.append("Category,Percentage")
+    for category, percent in summary["category_percentages"].items():
+        lines.append(f"{category},{percent:.2f}%")
+
+    return lines
+
+
 def validateFilters(filters: ExpenseFilters):
     """
     Validate and normalize expense filter parameters.
@@ -201,6 +238,7 @@ def log_command(command_name):
     Returns:
         function: Decorator function that wraps the command
     """
+
     def decorator(func):
         def wrapper(*args, **kwargs):
             from tracker.logger import logger

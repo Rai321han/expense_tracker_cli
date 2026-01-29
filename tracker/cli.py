@@ -1,6 +1,6 @@
 import argparse
 from datetime import datetime
-from tracker.utils import print_summary, log_command
+from tracker.utils import print_summary, log_command, format_summary_csv
 from tracker.logger import logger
 
 
@@ -220,9 +220,22 @@ def summary_parser(args):
         print("No expenses found for summary.")
         return
 
-    lines = print_summary(summary)
-    for line in lines:
-        print(line)
+    # lines = print_summary(summary)
+    # for line in lines:
+    #     print(line)
+    # Decide output format
+    if args.format and args.format.lower() == "csv":
+        lines = format_summary_csv(summary)
+        # save to a file
+        csv_file = f"summary_{summary['month']}.csv"
+        with open(csv_file, "w", newline="") as f:
+            f.write("\n".join(lines))
+        print(f"Summary exported to {csv_file}")
+    else:
+        # default: terminal table
+        lines = print_summary(summary)
+        for line in lines:
+            print(line)
 
 
 @log_command("edit")
