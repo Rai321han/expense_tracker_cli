@@ -67,7 +67,7 @@ python -m tracker <command> [options]
 #### 1. Add an Expense
 
 ```bash
-python -m tracker add --category "Food" --amount 50.00 [--date "2026-01-29"] [--note "Lunch"]
+python -m tracker add --category "Food" --amount 50.00 --date "2026-01-29" --note "Lunch"
 ```
 
 **Options:**
@@ -81,7 +81,7 @@ python -m tracker add --category "Food" --amount 50.00 [--date "2026-01-29"] [--
 #### 2. List Expenses
 
 ```bash
-python -m tracker list [--month "2026-01"] [--from "2026-01-01"] [--to "2026-01-31"] [--category "Food"] [--min 10] [--max 100] [--sort "date"] [--limit 10] [--format "table"] [--desc]
+python -m tracker list --month "2026-01" --from "2026-01-01" --to "2026-01-31" --category "Food" --min 10 --max 100 --sort "date" --limit 10 --format "table" --desc
 ```
 
 **Options:**
@@ -101,7 +101,7 @@ python -m tracker list [--month "2026-01"] [--from "2026-01-01"] [--to "2026-01-
 #### 3. Edit an Expense
 
 ```bash
-python -m tracker edit --id "EXP-20260129-0001" [--date "2026-01-29"] [--category "Food"] [--amount 60.00] [--note "Updated note"]
+python -m tracker edit --id "EXP-20260129-0001" --date "2026-01-29" --category "Food" --amount 60.00 --note "Updated note"
 ```
 
 **Options:**
@@ -127,7 +127,7 @@ python -m tracker delete --id "EXP-20260129-0001"
 #### 5. Generate Summary
 
 ```bash
-python -m tracker summary [--from "2026-01-01"] [--to "2026-01-31"] [--category "Food"]
+python -m tracker summary --from "2026-01-01" --to "2026-01-31" --category "Food"
 ```
 
 **Options:**
