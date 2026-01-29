@@ -23,7 +23,6 @@ A command-line application to manage and track your personal expenses efficientl
 ### Prerequisites
 
 - Python 3.12 or higher
-- pip package manager
 
 ### Setup
 
@@ -177,9 +176,9 @@ python -m tracker delete --id "EXP-20260129-0001"
 ```
 expense_tracker_cli/
 ├── README.md              # Project documentation
-├── data/
+├── data/                  # Generate automatically
 │   └── expenses.json      # JSON file storing all expenses
-├── logs/
+├── logs/                  # Generate automatically
 │   └── tracker.log        # Application logs
 └── tracker/
     ├── __init__.py        # Package initialization
@@ -228,7 +227,6 @@ The application includes comprehensive error handling for:
 - Invalid date formats
 - Invalid amount values (negative numbers)
 - Non-existent expense IDs
-- Corrupted storage files
 - Invalid filter parameters
 
 ## Development
@@ -243,16 +241,5 @@ The application includes comprehensive error handling for:
 - **types.py**: Type annotations and interfaces
 - **logger.py**: Logging configuration
 
-### Adding New Features
-
-To add new features:
-1. Update argument parser in `cli.py`
-2. Implement logic in `service.py`
-3. Add utility functions in `utils.py` if needed
-4. Ensure proper logging with the `@log_command` decorator
-
-## Currency
-
-The application defaults to BDT (Bangladeshi Taka) but can be customized by modifying the `currency` parameter in the `Expense` model.
 
 **Last Updated**: January 29, 2026
