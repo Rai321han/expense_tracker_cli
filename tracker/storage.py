@@ -47,7 +47,8 @@ def load():
     os.makedirs("./data", exist_ok=True)
 
     if not os.path.exists(DATA_FILE):
-        raise FileExistsError("invalid storage")
+        with open(DATA_FILE, "w") as f:
+            json.dump({"version": "1.0", "expenses": []}, f, indent=4)
 
     with open(DATA_FILE, "r") as f:
         try:

@@ -78,7 +78,7 @@ def format_table(expenses: list[Expense]) -> list[str]:
     return lines
 
 
-def format_csv(expenses: list[Expense]) -> list[str]:
+def format_list_csv(expenses: list[Expense]) -> list[str]:
     """
     Format expenses as CSV lines for export.
 
@@ -97,7 +97,7 @@ def format_csv(expenses: list[Expense]) -> list[str]:
             f"{exp['id']},"
             f"{exp['date']},"
             f"{exp['category']},"
-            f"{exp['amount']:.2f},"
+            f"{exp['amount']:.2f} {exp["currency"]},"
             f"{exp['note']}"
         )
     return lines
