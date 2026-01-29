@@ -22,7 +22,7 @@ A command-line application to manage and track your personal expenses efficientl
 
 ### Prerequisites
 
-- Python 3.8 or higher
+- Python 3.12 or higher
 - pip package manager
 
 ### Setup
@@ -35,12 +35,19 @@ cd expense_tracker_cli
 2. Create and activate a virtual environment:
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
-3. Install dependencies (if any):
+3. Activate virtual environment
+
+#### windows
 ```bash
-pip install -r requirements.txt
+source .venv\Scripts\activate
+```
+
+#### linux
+
+```bash
+source .venv/bin/activate
 ```
 
 ## Usage
