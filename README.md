@@ -98,9 +98,8 @@ python -m tracker list --from "2026-01-01" --to "2026-01-31" --category "Food" -
 | `--format`| Output format: `table` or `csv` (default: `table`) |
 | `--desc`| Display in descending order (default: ascending) |
 
-[!NOTE]
-```--month``` and ```--from```, ```--to``` will not work together.
-If none present, by default month will be current month
+> [!NOTE]
+> `--month` and `--from`, `--to` will not work together. If none present, by default month will be current month
 
 #### 3. Edit an Expense
 
