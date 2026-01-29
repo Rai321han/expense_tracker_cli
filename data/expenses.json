@@ -11,24 +11,6 @@
             "created_at": "2026-01-28T11:43:33.296320"
         },
         {
-            "id": "EXP-20260101-2",
-            "date": "2026-01-01",
-            "category": "electronics",
-            "amount": 500.0,
-            "note": "mouse for laptop",
-            "currency": "BDT",
-            "created_at": "2026-01-28T12:06:14.998149"
-        },
-        {
-            "id": "EXP-20260125-3",
-            "date": "2026-01-25",
-            "category": "bazar",
-            "amount": 30.5,
-            "note": "aluu kinsi",
-            "currency": "BDT",
-            "created_at": "2026-01-28T16:54:32.462153"
-        },
-        {
             "id": "EXP-20260126-0004",
             "date": "2026-01-26",
             "category": "electronics",
@@ -36,6 +18,69 @@
             "note": "cable",
             "currency": "BDT",
             "created_at": "2026-01-28T18:35:20.710435"
+        },
+        {
+            "id": "EXP-20260129-0005",
+            "date": "2026-01-29",
+            "category": "transport",
+            "amount": 70.0,
+            "note": "go to office",
+            "currency": "BDT",
+            "created_at": "2026-01-29T10:32:52.315430"
+        },
+        {
+            "id": "EXP-20260130-0006",
+            "date": "2026-01-30",
+            "category": "electronics",
+            "amount": 500.5,
+            "note": "nothing",
+            "currency": "BDT",
+            "created_at": "2026-01-29T12:24:45.591548"
+        },
+        {
+            "id": "EXP-20260130-0007",
+            "date": "2026-01-30",
+            "category": "electronics",
+            "amount": 500.5,
+            "note": "nothing",
+            "currency": "BDT",
+            "created_at": "2026-01-29T12:26:29.319079"
+        },
+        {
+            "id": "EXP-20260130-0008",
+            "date": "2026-01-30",
+            "category": "electronics",
+            "amount": 500.5,
+            "note": "nothing",
+            "currency": "BDT",
+            "created_at": "2026-01-29T12:26:41.136571"
+        },
+        {
+            "id": "EXP-20260130-0009",
+            "date": "2026-01-30",
+            "category": "electronics",
+            "amount": 500.5,
+            "note": "nothing",
+            "currency": "BDT",
+            "created_at": "2026-01-29T12:27:43.572754"
+        },
+        {
+            "id": "EXP-20260130-0010",
+            "date": "2026-01-30",
+            "category": "electronics",
+            "amount": 500.5,
+            "note": "nothing",
+            "currency": "BDT",
+            "created_at": "2026-01-29T12:55:28.034527"
+        },
+        {
+            "id": "EXP-20260130-0011",
+            "date": "2026-01-30",
+            "category": "electronics",
+            "amount": 500.5,
+            "note": "nothing",
+            "currency": "BDT",
+            "created_at": "2026-01-29T12:58:41.879386"
         }
     ]
 }

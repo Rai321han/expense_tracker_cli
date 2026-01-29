@@ -3,6 +3,7 @@ import json
 
 DATA_FILE = "./data/expenses.json"
 
+
 def save(expense_dict):
     os.makedirs("./data", exist_ok=True)
 
@@ -14,7 +15,7 @@ def save(expense_dict):
         try:
             data = json.load(f)
         except json.JSONDecodeError:
-            data = {"version": "1.0", "expenses": []}
+            raise ValueError("Expense data file is corrupted.")
 
     data["expenses"].append(expense_dict)
 
@@ -29,11 +30,11 @@ def load():
 
     if not os.path.exists(DATA_FILE):
         raise FileExistsError("invalid storage")
-    
+
     with open(DATA_FILE, "r") as f:
         try:
             data = json.load(f)
         except json.JSONDecodeError as e:
             raise e
     return data
-        # end try
+    # end try

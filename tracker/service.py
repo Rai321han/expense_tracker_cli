@@ -3,10 +3,12 @@ from datetime import datetime
 import json
 from tracker.models import Expense
 from tracker.storage import save, load
-from tracker.utils import generateExpenseId, validateDate, validateMonth
+from tracker.utils import generateExpenseId, validateDate, validateFilters
+from tracker.types import ExpenseFilters, ExpenseSummary
+
 
 class ExpenseService:
-    def add_expense(date: str, category, amount, note) -> Expense:
+    def add_expense(date: str, category: str, amount: float, note: str) -> Expense:
         if not validateDate(date):
             raise ValueError("Invalid date format. Please use YYYY-MM-DD.")
 
@@ -14,7 +16,6 @@ class ExpenseService:
             raise ValueError("Amount cannot be negative.")
 
         # get last expense number from storage to generate next id no
-
         data = load()
         expenses = data["expenses"]
         last_no = 0
@@ -32,21 +33,23 @@ class ExpenseService:
             date=date,
             category=category,
             amount=amount,
-            note=note
+            note=note,
         )
 
         savedExpense = save(expense.to_dict())
         return savedExpense
 
-    def edit_expense(id, date: str, category, amount, note) -> Expense:
+    def edit_expense(
+        id: str, date: str, category: str, amount: float, note: str
+    ) -> Expense:
         if date and not validateDate(date):
             raise ValueError("Invalid date format. Please use YYYY-MM-DD.")
 
         if amount and amount < 0:
             raise ValueError("Amount cannot be negative.")
-        
+
         data = load()
-   
+
         expenses = data["expenses"]
         print(expenses)
         for idx, exp in enumerate(expenses):
@@ -56,63 +59,41 @@ class ExpenseService:
                 expenses[idx]["amount"] = amount or expenses[idx]["amount"]
                 expenses[idx]["note"] = note or expenses[idx]["note"]
                 # save back
-                with open('./data/expenses.json', 'w') as f:
+                with open("./data/expenses.json", "w") as f:
                     json.dump(data, f, indent=4)
-                return expenses[idx] 
+                return expenses[idx]
         raise ValueError(f"Expense with ID {id} not found.")
 
-
-    def delete_expense(id) -> Expense:
+    def delete_expense(id: str) -> Expense:
         data = load()
-   
         expenses = data["expenses"]
         for idx, exp in enumerate(expenses):
             if exp["id"] == id:
                 deleted_expense = expenses.pop(idx)
-                # save back
-                with open('./data/expenses.json', 'w') as f:
+                with open("./data/expenses.json", "w") as f:
                     json.dump(data, f, indent=4)
                 return deleted_expense
         raise ValueError(f"Expense with ID {id} not found.")
 
+    def list_expenses(filters: ExpenseFilters) -> list[Expense]:
+        validated = validateFilters(filters)
 
+        month = validated.month
+        from_date = validated.from_date
+        to_date = validated.to_date
+        category = validated.category
+        min_amount = validated.min_amount
+        max_amount = validated.max_amount
+        sort_key = validated.sort
+        limit = validated.limit
+        sort_direction = validated.sort_direction
 
-    def list_expenses(filters):
-        month = filters["month"] or datetime.today().date().isoformat()[:7]
-        if month and not validateMonth(month):
-            raise ValueError("Invalid month format. Please use YYYY-MM.")
-
-        sort_key = filters["sort"] or "date"
-        if(sort_key and sort_key not in ["date", "amount", "category"]):
-            raise ValueError("Invalid sort key. Must be one of: date, amount, category.")
-        from_date = filters["from"] or None
-        to_date = filters["to"] or None
-        category = filters["category"] != None and filters["category"].lower() or None
-        min_amount = filters["min"] or None
-        max_amount = filters["max"] or None
-        limit = filters["limit"] or None
-        sort_direction = filters["desc"] and -1 or 1
-        if from_date and not validateDate(from_date):
-            raise ValueError("Invalid 'from' date format. Please use YYYY-MM-DD.")
-        if to_date and not validateDate(to_date):
-            raise ValueError("Invalid 'to' date format. Please use YYYY-MM-DD.")
-        if from_date and to_date and to_date < from_date:
-            raise ValueError("'to' date cannot be earlier than 'from' date.")
-        if min_amount and min_amount < 0:
-            raise ValueError("Minimum amount cannot be negative.")
-        if max_amount and max_amount < 0:
-            raise ValueError("Maximum amount cannot be negative.")
-        if max_amount and min_amount and max_amount < min_amount:
-            raise ValueError("Maximum amount cannot be less than minimum amount.")
-        if limit and limit <= 0:
-            raise ValueError("Limit must be a positive integer.")
-        
         data = load()
         expenses = data["expenses"]
-        # Apply filters
+
         if len(expenses) == 0:
             return []
-        
+
         filtered_expenses = []
         for exp in expenses:
             if month and not exp["date"].startswith(month):
@@ -128,15 +109,17 @@ class ExpenseService:
             if max_amount and exp["amount"] > max_amount:
                 continue
             filtered_expenses.append(exp)
-        
+
         # Sort expenses
-        filtered_expenses.sort(key=lambda x: x[sort_key], reverse=(sort_direction == -1))
+        filtered_expenses.sort(
+            key=lambda x: x[sort_key], reverse=(sort_direction == -1)
+        )
         # Apply limit
         if limit:
             filtered_expenses = filtered_expenses[:limit]
         return filtered_expenses
-    
-    def summarize_expenses(filters):
+
+    def summarize_expenses(filters: ExpenseFilters) -> ExpenseSummary:
         expenses = ExpenseService.list_expenses(filters)
         if len(expenses) == 0:
             return {"grand_total": 0, "total_expenses": 0}
@@ -147,11 +130,11 @@ class ExpenseService:
         for exp in expenses:
             cat = exp["category"]
             category_totals[cat] = category_totals.get(cat, 0) + exp["amount"]
-        
-        #highest expense
+
+        # highest expense
         highest_expense = max(expenses, key=lambda x: x["amount"])
 
-        #average per day
+        # average per day
         month = filters["month"] or datetime.today().date().isoformat()[:7]
         year, month = map(int, month.split("-"))
         days_in_month = calendar.monthrange(year, month)[1]
@@ -160,7 +143,9 @@ class ExpenseService:
         # catergory wise percentage
         category_percentages = {}
         for cat, total in category_totals.items():
-            category_percentages[cat] = (total / total_amount) * 100 if total_amount > 0 else 0
+            category_percentages[cat] = (
+                (total / total_amount) * 100 if total_amount > 0 else 0
+            )
 
         summary = {
             "month": filters["month"] or datetime.today().date().isoformat()[:7],
@@ -170,6 +155,6 @@ class ExpenseService:
             "average_per_day": average_per_day,
             "category_percentages": category_percentages,
             "highest_expense": highest_expense,
-            "currency": expenses[0]["currency"]
+            "currency": expenses[0]["currency"],
         }
         return summary
