@@ -137,6 +137,10 @@ python -m tracker summary --from "2026-01-01" --to "2026-01-31" --category "Food
 - Same filtering options (`--from`, `--to`, `--month`, `--category`) as `list` command
 - Displays aggregated data including totals, averages, and category breakdowns
 
+> [!NOTE]
+> `--month` and `--from`, `--to` will not work together. If none present, by default month will be current month
+
+
 ## Examples
 
 ### Add a grocery expense
